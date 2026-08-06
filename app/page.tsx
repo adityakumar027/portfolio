@@ -7,38 +7,29 @@ const CoreScene = dynamic(() => import("./components/CoreScene"), { ssr: false }
 
 const experience = [
   {
-    period: "2026 — NOW",
+    period: "MAY 2026 — PRESENT",
     company: "Curefit · House of Cult",
     role: "Software Engineering Intern",
-    summary: "Building production automation across campaign, segmentation, notification, and internal operations systems.",
+    summary: "Engineering production AI automation across campaign, segmentation, notification, and internal operations systems.",
     outcomes: [
-      "Built agent-driven root-cause analysis and self-healing workflows that automatically resolve 60%+ of notification failures.",
-      "Reduced incident response time by 70% by connecting Coralogix, AWS SQS, Sentry, and Metabase into one remediation loop.",
-      "Designed human-in-the-loop workflow automation targeting an 85% reduction in manual policy review.",
+      "Built an AI agent for root-cause analysis with Hermes Agent and webhook-based self-learning feedback loops, auto-resolving 60%+ of failures while optimizing token usage for low latency and cost.",
+      "Reduced incident response time by 70% by integrating Coralogix, AWS SQS, Sentry, and Metabase into automated monitoring and remediation pipelines.",
+      "Evolved leave approval from Copilot to Autopilot with human-in-the-loop review, cutting manual review effort by 85%.",
+      "Built and maintained 20+ REST APIs, including Metabase card APIs powering real-time dashboards for the Operations team.",
     ],
-    stack: "Java · Python · AI agents · Kubernetes · MySQL",
+    stack: "Hermes Agent · Java · Python · AWS SQS · Coralogix · Sentry · Metabase · REST APIs",
   },
   {
-    period: "2025 — 2026",
+    period: "MAY 2025 — APR 2026",
     company: "WorldQuant BRAIN",
-    role: "Quantitative Research Consultant · Expert",
+    role: "Quantitative Research Consultant — Expert",
     summary: "Researched, implemented, and backtested quantitative alpha models under strict risk and turnover constraints.",
     outcomes: [
-      "Improved model performance by 20% through iterative research and backtesting.",
-      "Submitted 150+ alpha models; 12+ passed all quality checks, including Sharpe above 2.25 and turnover below 30%.",
+      "Developed and implemented new alpha models that improved investment-strategy performance by 20%.",
+      "Conducted quantitative research and backtesting, collaborating with research teams to derive actionable financial insights.",
+      "Submitted 300+ alphas; 12+ passed every quality check, including Sharpe above 2.25 and turnover below 30%.",
     ],
     stack: "Python · Quant research · Backtesting · Statistics",
-  },
-  {
-    period: "2024",
-    company: "Jortke",
-    role: "Software Engineering Intern",
-    summary: "Improved the speed and reliability of a production Node.js backend.",
-    outcomes: [
-      "Reduced high-traffic endpoint latency by 15–20% with Redis caching and queuing.",
-      "Built 10+ REST APIs and reduced database queries by 30%.",
-    ],
-    stack: "Node.js · Express · Redis · REST APIs",
   },
 ];
 
@@ -47,7 +38,12 @@ const projects = [
     index: "01",
     title: "Automated Job Application System",
     type: "Full-stack browser automation",
-    description: "A Chrome extension that converts unstructured résumé PDFs into editable profiles and uses them to complete applications across job portals.",
+    description: "A full-stack Chrome extension that turns unstructured résumé PDFs into editable profiles and completes applications across job portals.",
+    outcomes: [
+      "Built the extension and application stack with React, Node.js, Express, and MongoDB.",
+      "Designed JWT-secured APIs and a modular schema for private, scalable profile management.",
+      "Implemented asynchronous PDF parsing with pdf-parse and an editable React review flow.",
+    ],
     result: "PDF → structured profile → autofill",
     stack: "React · Node.js · Express · MongoDB · JWT",
     href: "https://github.com/adityakumar027/Automated-Job-Application-System",
@@ -57,6 +53,11 @@ const projects = [
     title: "Graph Node Classification",
     type: "Graph machine learning",
     description: "A GCN-based node classifier with two-hop neighborhood aggregation and weighted loss for the imbalanced CORA citation dataset.",
+    outcomes: [
+      "Improved classification accuracy by 15% over traditional dense-network baselines.",
+      "Implemented two-hop neighborhood aggregation for stronger graph representation learning.",
+      "Used weighted loss and data balancing to improve convergence on imbalanced CORA classes.",
+    ],
     result: "15% accuracy improvement",
     stack: "Python · TensorFlow · Keras · GCN",
     href: "https://github.com/adityakumar027/node-classifier",
@@ -66,6 +67,11 @@ const projects = [
     title: "PyOS",
     type: "Systems simulation",
     description: "A modular terminal operating-system simulation with authentication, concurrent command execution, process scheduling, and an extensible shell.",
+    outcomes: [
+      "Built a terminal OS simulation with a custom CLI, secure authentication, and multithreading.",
+      "Designed an extensible shell where new commands can be added in fewer than 10 lines.",
+      "Applied object-oriented architecture to authentication, process execution, and module boundaries.",
+    ],
     result: "New commands in under 10 lines",
     stack: "Python · CLI · Multithreading",
     href: "https://github.com/adityakumar027/PyOS",
@@ -73,10 +79,20 @@ const projects = [
 ];
 
 const capabilities = [
-  { label: "Backend", items: "Java, Python, Node.js, Express, REST APIs, microservices" },
-  { label: "AI systems", items: "AI agents, RAG, LangGraph, prompt engineering, deep learning" },
-  { label: "Infrastructure", items: "Kubernetes, AWS SQS, Redis, Jenkins, Coralogix, Sentry" },
-  { label: "Data", items: "MySQL, MongoDB, Pandas, TensorFlow, quantitative research" },
+  { label: "Languages", items: "C, C++, JavaScript, Python, SQL" },
+  { label: "Backend & Web", items: "Node.js, React, Express, REST APIs, microservices, JWT, Tailwind CSS" },
+  { label: "AI Engineering", items: "Hermes Agent, OpenClaw, RAG, tokenization, prompt engineering, AI agents, deep learning" },
+  { label: "Cloud & Operations", items: "AWS SQS, Kubernetes, Rancher, Jenkins, Spinnaker, Coralogix, Sentry, Metabase" },
+  { label: "Data & ML", items: "MySQL, MongoDB, TensorFlow, Keras, NumPy, Pandas, Matplotlib" },
+  { label: "Engineering", items: "Git, GitHub, Linux, workflow automation, MCP tooling, data structures, algorithms, operating systems" },
+];
+
+const achievements = [
+  "LeetCode Knight · 1820",
+  "CodeChef 3★ · 1661",
+  "Codeforces · 1300+",
+  "1,000+ problems solved",
+  "Google Big Code 2026 semifinalist",
 ];
 
 export default function Home() {
@@ -166,6 +182,7 @@ export default function Home() {
                   <div className="project-top"><p>{project.type}</p><span>{project.index} / 03</span></div>
                   <h3>{project.title}</h3>
                   <p className="project-description">{project.description}</p>
+                  <ul className="project-outcomes">{project.outcomes.map((outcome) => <li key={outcome}>{outcome}</li>)}</ul>
                   <div className="project-meta"><span>{project.result}</span><span>{project.stack}</span></div>
                 </div>
                 <span className="project-arrow" aria-hidden="true">↗</span>
@@ -176,18 +193,21 @@ export default function Home() {
 
         <section className="section about" id="about">
           <div className="section-heading">
-            <p className="section-index">03 / APPROACH</p>
-            <h2>Reason clearly.<br />Ship responsibly.</h2>
+            <p className="section-index">03 / PROFILE &amp; SKILLS</p>
+            <h2>Strong foundations.<br />Production range.</h2>
           </div>
           <div className="about-layout">
             <div className="about-copy">
-              <p>I’m an Integrated B.Tech IT + MBA student at IIIT Gwalior, graduating in 2027. My work sits at the intersection of backend engineering, intelligent automation, and production operations.</p>
+              <p>I’m an Integrated B.Tech IT + MBA student at IIIT Gwalior, graduating in 2027 with a 7.97 CGPA. My work sits at the intersection of backend engineering, intelligent automation, and production operations.</p>
               <p>I care about systems that are observable, explainable, and designed for failure—not just demos that work once.</p>
-              <div className="education-line"><span>Education</span><strong>IIIT Gwalior · B.Tech IT + MBA · 2022—2027</strong></div>
+              <div className="education-line"><span>Education</span><strong>IIIT Gwalior · Integrated B.Tech IT + MBA · Nov 2022—Jun 2027</strong></div>
             </div>
             <div className="capabilities">
               {capabilities.map((capability) => <article key={capability.label}><h3>{capability.label}</h3><p>{capability.items}</p></article>)}
             </div>
+          </div>
+          <div className="achievement-strip" aria-label="Selected achievements">
+            {achievements.map((achievement, index) => <span key={achievement}><b>{String(index + 1).padStart(2, "0")}</b>{achievement}</span>)}
           </div>
         </section>
 
