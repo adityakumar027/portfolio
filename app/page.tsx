@@ -111,8 +111,8 @@ export default function Home() {
         <section className="hero" id="top">
           <div className="hero-copy">
             <p className="eyebrow"><span /> Aditya Kumar · Software Engineer</p>
-            <h1>I build systems<br />that <em>fix themselves.</em></h1>
-            <p className="hero-summary">Production AI and backend infrastructure engineered for reliability—from self-healing workflows to research-driven machine learning systems.</p>
+            <h1>I build systems<br />that <em>scale &amp; heal.</em></h1>
+            <p className="hero-summary">Production AI and backend infrastructure engineered to scale, recover, and stay reliable—from self-healing workflows to research-driven machine learning systems.</p>
             <div className="hero-actions">
               <a className="primary-action" href="#work">View selected work <span>↓</span></a>
               <a className="text-action" href="mailto:adi.workspace76865@gmail.com">adi.workspace76865@gmail.com</a>
