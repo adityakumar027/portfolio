@@ -101,7 +101,7 @@ export default function Home() {
           <a href="#about" onClick={closeMenu}>About</a>
           <a href="#contact" onClick={closeMenu}>Contact</a>
         </nav>
-        <a className="resume-link" href="/Aditya_Kumar_Resume.pdf" target="_blank">Résumé <span>↗</span></a>
+        <a className="resume-link" href="https://drive.google.com/file/d/1OJ-TCUjlttRgMqDw7UB4nr96Z6fGtAiQ/view?usp=sharing" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>
         <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-label="Toggle navigation">
           {menuOpen ? "Close" : "Menu"}
         </button>
@@ -199,7 +199,7 @@ export default function Home() {
           <div className="contact-links">
             <a href="https://github.com/adityakumar027" target="_blank" rel="noreferrer">GitHub ↗</a>
             <a href="https://www.linkedin.com/in/adicrzz/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-            <a href="/Aditya_Kumar_Resume.pdf" target="_blank">Résumé ↗</a>
+            <a href="https://drive.google.com/file/d/1OJ-TCUjlttRgMqDw7UB4nr96Z6fGtAiQ/view?usp=sharing" target="_blank" rel="noreferrer">Résumé ↗</a>
           </div>
         </section>
       </main>

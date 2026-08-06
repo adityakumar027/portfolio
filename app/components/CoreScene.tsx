@@ -19,9 +19,31 @@ const haloFragment = `
   void main() {
     vec2 point = vUv - 0.5;
     float radius = length(point);
-    float broad = pow(max(0.0, 1.0 - radius * 1.68), 3.4);
-    vec3 color = vec3(0.10, 0.43, 0.36);
-    gl_FragColor = vec4(color * broad * 0.52, broad * 0.22);
+    float broad = pow(max(0.0, 1.0 - radius * 1.72), 3.0);
+    float core = pow(max(0.0, 1.0 - radius * 5.2), 2.2);
+    vec3 color = mix(vec3(0.12, 0.55, 0.46), vec3(0.72, 1.0, 0.94), core);
+    gl_FragColor = vec4(color * (broad + core * 0.55), (broad * 0.4 + core * 0.08));
+  }
+`;
+
+const rimVertex = `
+  varying vec3 vNormal;
+  varying vec3 vWorldPosition;
+  void main() {
+    vNormal = normalize(mat3(modelMatrix) * normal);
+    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+    vWorldPosition = worldPosition.xyz;
+    gl_Position = projectionMatrix * viewMatrix * worldPosition;
+  }
+`;
+
+const rimFragment = `
+  varying vec3 vNormal;
+  varying vec3 vWorldPosition;
+  void main() {
+    vec3 viewDirection = normalize(cameraPosition - vWorldPosition);
+    float rim = pow(1.0 - max(dot(normalize(vNormal), viewDirection), 0.0), 4.2);
+    gl_FragColor = vec4(vec3(0.44, 1.0, 0.84) * rim, rim * 0.18);
   }
 `;
 
@@ -32,12 +54,13 @@ function Core({ pointer }: { pointer: PointerState }) {
   const body = useRef<THREE.Mesh>(null);
   const shell = useRef<THREE.Mesh>(null);
   const rings = useRef<THREE.Group>(null);
+  const hoverLight = useRef<THREE.PointLight>(null);
   const bodyMaterial = useRef<THREE.MeshPhysicalMaterial>(null);
   const shellMaterial = useRef<THREE.MeshStandardMaterial>(null);
   const targetScale = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state, delta) => {
-    if (!group.current || !body.current || !shell.current || !rings.current || !bodyMaterial.current || !shellMaterial.current) return;
+    if (!group.current || !body.current || !shell.current || !rings.current || !hoverLight.current || !bodyMaterial.current || !shellMaterial.current) return;
     const time = state.clock.elapsedTime;
     const pointerX = pointer.current.x;
     const pointerY = pointer.current.y;
@@ -55,9 +78,10 @@ function Core({ pointer }: { pointer: PointerState }) {
     shell.current.rotation.x -= delta * 0.025;
     shell.current.rotation.y += delta * 0.06;
     rings.current.rotation.z += delta * 0.012;
-    bodyMaterial.current.emissiveIntensity = THREE.MathUtils.lerp(bodyMaterial.current.emissiveIntensity, 0.16 + hover * 0.48, 0.08);
-    shellMaterial.current.emissiveIntensity = THREE.MathUtils.lerp(shellMaterial.current.emissiveIntensity, 0.5 + hover * 1.05, 0.08);
-    shellMaterial.current.opacity = THREE.MathUtils.lerp(shellMaterial.current.opacity, 0.13 + hover * 0.12, 0.08);
+    hoverLight.current.intensity = THREE.MathUtils.lerp(hoverLight.current.intensity, 5 + hover * 19, 0.1);
+    bodyMaterial.current.emissiveIntensity = THREE.MathUtils.lerp(bodyMaterial.current.emissiveIntensity, 0.2 + hover * 0.16, 0.1);
+    shellMaterial.current.emissiveIntensity = THREE.MathUtils.lerp(shellMaterial.current.emissiveIntensity, 0.72 + hover * 0.48, 0.1);
+    shellMaterial.current.opacity = THREE.MathUtils.lerp(shellMaterial.current.opacity, 0.22 + hover * 0.08, 0.1);
   });
 
   return (
@@ -68,23 +92,29 @@ function Core({ pointer }: { pointer: PointerState }) {
       </mesh>
 
       <group ref={rings} rotation={[1.05, 0.2, 0.1]}>
-        {[2.18, 2.62].map((radius, index) => (
+        {[1.96, 2.26].map((radius, index) => (
           <mesh key={radius} rotation={[index * 0.7, index * 0.3, index * 0.5]}>
-            <torusGeometry args={[radius, 0.011, 6, 160]} />
-            <meshBasicMaterial color="#4ca58f" transparent opacity={index ? 0.07 : 0.11} />
+            <torusGeometry args={[radius, 0.009, 6, 150]} />
+            <meshStandardMaterial color="#b3ffed" emissive="#21705f" emissiveIntensity={1.15} transparent opacity={index ? 0.13 : 0.22} roughness={0.25} metalness={0.68} />
           </mesh>
         ))}
       </group>
 
       <mesh ref={shell} scale={1.68}>
         <icosahedronGeometry args={[1, 2]} />
-        <meshStandardMaterial ref={shellMaterial} color="#91d9c7" emissive="#24695a" emissiveIntensity={0.5} transparent opacity={0.13} wireframe />
+        <meshStandardMaterial ref={shellMaterial} color="#b7ffed" emissive="#24695a" emissiveIntensity={0.72} transparent opacity={0.22} wireframe />
       </mesh>
 
       <mesh ref={body} scale={1.36} rotation={[0.16, 0.4, 0.08]}>
-        <dodecahedronGeometry args={[1, 0]} />
-        <meshPhysicalMaterial ref={bodyMaterial} color="#081511" emissive="#0b3b30" emissiveIntensity={0.16} metalness={0.16} roughness={0.68} clearcoat={0.06} clearcoatRoughness={0.72} envMapIntensity={0.2} flatShading />
+        <icosahedronGeometry args={[1, 0]} />
+        <meshPhysicalMaterial ref={bodyMaterial} color="#07110e" emissive="#08251e" emissiveIntensity={0.2} metalness={0.9} roughness={0.24} clearcoat={1} clearcoatRoughness={0.1} envMapIntensity={1.35} flatShading />
       </mesh>
+
+      <mesh scale={1.39} rotation={[0.16, 0.4, 0.08]}>
+        <icosahedronGeometry args={[1, 2]} />
+        <shaderMaterial vertexShader={rimVertex} fragmentShader={rimFragment} transparent depthWrite={false} blending={THREE.AdditiveBlending} />
+      </mesh>
+      <pointLight ref={hoverLight} position={[1.7, 1.2, 2.4]} color="#eafffa" intensity={5} distance={5.5} decay={2} />
     </group>
   );
 }
@@ -119,12 +149,14 @@ function Scene({ pointer }: { pointer: PointerState }) {
   return (
     <>
       <fog attach="fog" args={["#070908", 6, 13]} />
-      <ambientLight intensity={0.18} color="#78a99e" />
-      <hemisphereLight color="#8edbc8" groundColor="#020403" intensity={0.72} />
+      <ambientLight intensity={0.06} color="#b9fff0" />
+      <spotLight position={[-4, 5, 5]} color="#f0fffb" intensity={24} angle={0.4} penumbra={0.95} distance={15} decay={2} />
+      <pointLight position={[4, -2, 3]} color="#1e7868" intensity={5} distance={10} decay={2} />
+      <spotLight position={[4, 3, -3]} color="#71f5d4" intensity={38} angle={0.55} penumbra={1} distance={14} decay={2} />
       <Core pointer={pointer} />
       <Particles />
       <EffectComposer multisampling={0} resolutionScale={0.8}>
-        <Bloom intensity={0.3} luminanceThreshold={0.58} luminanceSmoothing={0.22} mipmapBlur />
+        <Bloom intensity={0.38} luminanceThreshold={0.76} luminanceSmoothing={0.2} mipmapBlur />
         <Noise opacity={0.018} blendFunction={BlendFunction.SOFT_LIGHT} />
         <Vignette eskil={false} offset={0.2} darkness={0.58} />
       </EffectComposer>

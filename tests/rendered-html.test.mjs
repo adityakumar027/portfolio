@@ -25,7 +25,7 @@ test("server-renders the finished portfolio", async () => {
   assert.match(html, /scale &amp; heal/);
   assert.match(html, /Work that reached/);
   assert.match(html, /Automated Job Application System/);
-  assert.match(html, /href="\/Aditya_Kumar_Resume\.pdf"/);
+  assert.match(html, /href="https:\/\/drive\.google\.com\/file\/d\/1OJ-TCUjlttRgMqDw7UB4nr96Z6fGtAiQ\/view\?usp=sharing"/);
   assert.match(html, /aria-label="Primary navigation"/);
   assert.doesNotMatch(html, /Codex is working|Your site is taking shape|codex-preview/i);
 });
