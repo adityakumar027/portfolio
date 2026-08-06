@@ -3,7 +3,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Bloom, EffectComposer, Noise, Vignette } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
-import { Suspense, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 const haloVertex = `
@@ -26,27 +26,66 @@ const haloFragment = `
   }
 `;
 
-function Core() {
+const rimVertex = `
+  varying vec3 vNormal;
+  varying vec3 vWorldPosition;
+  void main() {
+    vNormal = normalize(mat3(modelMatrix) * normal);
+    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+    vWorldPosition = worldPosition.xyz;
+    gl_Position = projectionMatrix * viewMatrix * worldPosition;
+  }
+`;
+
+const rimFragment = `
+  varying vec3 vNormal;
+  varying vec3 vWorldPosition;
+  void main() {
+    vec3 viewDirection = normalize(cameraPosition - vWorldPosition);
+    float rim = pow(1.0 - max(dot(normalize(vNormal), viewDirection), 0.0), 4.2);
+    gl_FragColor = vec4(vec3(0.44, 1.0, 0.84) * rim, rim * 0.18);
+  }
+`;
+
+type PointerState = { current: { x: number; y: number } };
+
+function Core({ pointer }: { pointer: PointerState }) {
   const group = useRef<THREE.Group>(null);
   const body = useRef<THREE.Mesh>(null);
   const shell = useRef<THREE.Mesh>(null);
   const rings = useRef<THREE.Group>(null);
+  const shine = useRef<THREE.PointLight>(null);
+  const bodyMaterial = useRef<THREE.MeshPhysicalMaterial>(null);
+  const nucleusMaterial = useRef<THREE.MeshStandardMaterial>(null);
+  const targetScale = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state, delta) => {
-    if (!group.current || !body.current || !shell.current || !rings.current) return;
+    if (!group.current || !body.current || !shell.current || !rings.current || !shine.current || !bodyMaterial.current || !nucleusMaterial.current) return;
     const time = state.clock.elapsedTime;
+    const pointerX = pointer.current.x;
+    const pointerY = pointer.current.y;
+    const horizontalFocus = THREE.MathUtils.clamp((pointerX - 0.08) / 0.58, 0, 1);
+    const verticalFocus = THREE.MathUtils.clamp(1 - Math.abs(pointerY) * 1.45, 0, 1);
+    const hover = horizontalFocus * verticalFocus;
     group.current.position.y = Math.sin(time * 0.38) * 0.045;
-    group.current.rotation.x = state.pointer.y * 0.035;
-    group.current.rotation.y = state.pointer.x * 0.055;
+    group.current.rotation.x = pointerY * 0.055;
+    group.current.rotation.y = pointerX * 0.075;
+    targetScale.setScalar(0.84 + hover * 0.035);
+    group.current.scale.lerp(targetScale, 1 - Math.exp(-delta * 5));
     body.current.rotation.y += delta * 0.045;
     body.current.rotation.z += delta * 0.018;
     shell.current.rotation.x -= delta * 0.025;
     shell.current.rotation.y += delta * 0.06;
     rings.current.rotation.z += delta * 0.012;
+    shine.current.position.x = THREE.MathUtils.lerp(1.7, (pointerX - 0.45) * 3.1, hover);
+    shine.current.position.y = THREE.MathUtils.lerp(1.2, pointerY * 2.1, hover);
+    shine.current.intensity = THREE.MathUtils.lerp(shine.current.intensity, 5 + hover * 19, 0.1);
+    bodyMaterial.current.emissiveIntensity = THREE.MathUtils.lerp(bodyMaterial.current.emissiveIntensity, 0.2 + hover * 0.16, 0.1);
+    nucleusMaterial.current.emissiveIntensity = THREE.MathUtils.lerp(nucleusMaterial.current.emissiveIntensity, 2.4 + hover * 2.2, 0.1);
   });
 
   return (
-    <group ref={group} position={[2.82, 0.06, 0]} scale={0.86}>
+    <group ref={group} position={[2.82, 0.06, 0]} scale={0.84}>
       <mesh position={[0, 0, -1.5]} scale={[5.8, 5.8, 1]} renderOrder={-2}>
         <planeGeometry args={[1, 1]} />
         <shaderMaterial vertexShader={haloVertex} fragmentShader={haloFragment} transparent depthWrite={false} depthTest={false} blending={THREE.AdditiveBlending} />
@@ -61,30 +100,40 @@ function Core() {
         ))}
       </group>
 
-      <mesh ref={shell} scale={1.74}>
+      <mesh ref={shell} scale={1.68}>
         <icosahedronGeometry args={[1, 2]} />
-        <meshStandardMaterial color="#b7ffed" emissive="#24695a" emissiveIntensity={0.78} transparent opacity={0.27} wireframe />
+        <meshStandardMaterial color="#b7ffed" emissive="#24695a" emissiveIntensity={0.72} transparent opacity={0.22} wireframe />
       </mesh>
 
-      <mesh ref={body} scale={1.46} rotation={[0.16, 0.4, 0.08]}>
-        <dodecahedronGeometry args={[1, 1]} />
-        <meshPhysicalMaterial color="#0b1b17" emissive="#08251e" emissiveIntensity={0.46} metalness={0.84} roughness={0.2} clearcoat={1} clearcoatRoughness={0.15} envMapIntensity={1.25} flatShading />
+      <mesh ref={body} scale={1.36} rotation={[0.16, 0.4, 0.08]}>
+        <icosahedronGeometry args={[1, 0]} />
+        <meshPhysicalMaterial ref={bodyMaterial} color="#07110e" emissive="#08251e" emissiveIntensity={0.2} metalness={0.9} roughness={0.24} clearcoat={1} clearcoatRoughness={0.1} envMapIntensity={1.35} flatShading />
       </mesh>
 
-      <mesh scale={1.55} rotation={[0.16, 0.4, 0.08]}>
-        <dodecahedronGeometry args={[1, 1]} />
-        <meshStandardMaterial color="#71f5d4" emissive="#1f6c5b" emissiveIntensity={0.65} transparent opacity={0.07} side={THREE.BackSide} depthWrite={false} />
+      <mesh scale={1.39} rotation={[0.16, 0.4, 0.08]}>
+        <icosahedronGeometry args={[1, 2]} />
+        <shaderMaterial vertexShader={rimVertex} fragmentShader={rimFragment} transparent depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
 
-      <mesh scale={0.52} rotation={[0.35, 0.1, 0.48]}>
+      <mesh scale={0.96} rotation={[-0.18, 0.25, 0.38]}>
+        <octahedronGeometry args={[1, 0]} />
+        <meshPhysicalMaterial color="#0b211b" emissive="#0b3329" emissiveIntensity={0.48} metalness={0.72} roughness={0.2} transparent opacity={0.72} wireframe />
+      </mesh>
+
+      <mesh position={[-0.46, 0, 1.28]} scale={0.31} rotation={[0.35, 0.1, 0.48]}>
         <octahedronGeometry args={[1, 1]} />
-        <meshStandardMaterial color="#d9fff6" emissive="#71f5d4" emissiveIntensity={2.2} transparent opacity={0.68} wireframe />
+        <meshStandardMaterial color="#b8ffed" emissive="#45c9aa" emissiveIntensity={1.8} transparent opacity={0.62} wireframe />
       </mesh>
-      <mesh scale={0.095}>
+      <mesh position={[-0.46, 0, 1.3]} scale={0.14} rotation={[0.35, 0.1, 0.48]}>
+        <octahedronGeometry args={[1, 0]} />
+        <meshStandardMaterial ref={nucleusMaterial} color="#effffb" emissive="#71f5d4" emissiveIntensity={2.4} metalness={0.08} roughness={0.06} />
+      </mesh>
+      <mesh position={[-0.46, 0, 1.4]} scale={0.042}>
         <sphereGeometry args={[1, 20, 20]} />
         <meshBasicMaterial color="#effffb" />
       </mesh>
-      <pointLight color="#71f5d4" intensity={3.8} distance={5} decay={2.3} />
+      <pointLight position={[-0.46, 0, 1.25]} color="#71f5d4" intensity={3.4} distance={3.2} decay={2.3} />
+      <pointLight ref={shine} position={[1.7, 1.2, 2.4]} color="#eafffa" intensity={5} distance={5.5} decay={2} />
     </group>
   );
 }
@@ -115,7 +164,7 @@ function Particles() {
   );
 }
 
-function Scene() {
+function Scene({ pointer }: { pointer: PointerState }) {
   return (
     <>
       <fog attach="fog" args={["#070908", 6, 13]} />
@@ -123,7 +172,7 @@ function Scene() {
       <spotLight position={[-4, 5, 5]} color="#f0fffb" intensity={24} angle={0.4} penumbra={0.95} distance={15} decay={2} />
       <pointLight position={[4, -2, 3]} color="#1e7868" intensity={5} distance={10} decay={2} />
       <spotLight position={[4, 3, -3]} color="#71f5d4" intensity={38} angle={0.55} penumbra={1} distance={14} decay={2} />
-      <Core />
+      <Core pointer={pointer} />
       <Particles />
       <EffectComposer multisampling={0} resolutionScale={0.8}>
         <Bloom intensity={0.38} luminanceThreshold={0.76} luminanceSmoothing={0.2} mipmapBlur />
@@ -137,6 +186,16 @@ function Scene() {
 export default function CoreScene() {
   const [enabled] = useState(() => typeof window !== "undefined" && innerWidth > 980 && !matchMedia("(prefers-reduced-motion: reduce)").matches);
   const [ready, setReady] = useState(false);
+  const pointer = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const trackPointer = (event: PointerEvent) => {
+      pointer.current.x = (event.clientX / innerWidth) * 2 - 1;
+      pointer.current.y = -(event.clientY / innerHeight) * 2 + 1;
+    };
+    addEventListener("pointermove", trackPointer, { passive: true });
+    return () => removeEventListener("pointermove", trackPointer);
+  }, []);
 
   if (!enabled) return <div className="core-fallback" aria-hidden="true" />;
 
@@ -157,7 +216,7 @@ export default function CoreScene() {
             requestAnimationFrame(() => setReady(true));
           }}
         >
-          <Suspense fallback={null}><Scene /></Suspense>
+          <Suspense fallback={null}><Scene pointer={pointer} /></Suspense>
         </Canvas>
       </div>
     </>
