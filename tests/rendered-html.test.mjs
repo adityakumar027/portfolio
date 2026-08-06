@@ -22,7 +22,7 @@ test("server-renders the finished portfolio", async () => {
   const html = await response.text();
   assert.match(html, /<title>Aditya Kumar — AI &amp; Backend Software Engineer<\/title>/i);
   assert.match(html, /I build systems/);
-  assert.match(html, /fix themselves/);
+  assert.match(html, /scale &amp; heal/);
   assert.match(html, /Work that reached/);
   assert.match(html, /Automated Job Application System/);
   assert.match(html, /href="\/Aditya_Kumar_Resume\.pdf"/);
