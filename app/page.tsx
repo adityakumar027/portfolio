@@ -123,9 +123,9 @@ export default function Home() {
             <span>STATUS / ACTIVE</span>
           </div>
           <div className="hero-proof" aria-label="Selected career metrics">
-            <article><strong>70%</strong><span>faster incident response</span></article>
-            <article><strong>60%+</strong><span>failures auto-resolved</span></article>
-            <article><strong>1,000+</strong><span>algorithmic problems solved</span></article>
+            <article><strong>70%</strong><span><em>FASTER</em> INCIDENT RESPONSE</span></article>
+            <article><strong>60%+</strong><span>FAILURES <em>AUTO-RESOLVED</em></span></article>
+            <article><strong>1,000+</strong><span><em>ALGORITHMIC</em> PROBLEMS SOLVED</span></article>
           </div>
         </section>
 
