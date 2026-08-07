@@ -164,9 +164,9 @@ export default function Home() {
       <div className="site-grain" aria-hidden="true" />
 
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="The Core home">
-          <span className="brand-mark">C</span>
-          <span>THE CORE<small>ADITYA KUMAR</small></span>
+        <a className="brand" href="#top" aria-label="Portfolio home">
+          <span className="brand-mark">P</span>
+          <span>PORTFOLIO<small>ADITYA KUMAR</small></span>
         </a>
         <nav className={menuOpen ? "nav-links is-open" : "nav-links"} aria-label="Primary navigation">
           <a href="#experience" onClick={closeMenu}>Experience</a>
@@ -184,7 +184,14 @@ export default function Home() {
       <main id="main">
         <section className="hero" id="top">
           <div className="hero-copy">
-            <p className="eyebrow"><span /> Aditya Kumar · Software Engineer</p>
+            <p className="eyebrow">
+              <span className="eyebrow-dot" aria-hidden="true" />
+              <span className="eyebrow-name">Aditya Kumar</span>
+              <span className="eyebrow-separator" aria-hidden="true">·</span>
+              <span>Software Engineer</span>
+              <span className="eyebrow-separator" aria-hidden="true">·</span>
+              <span className="eyebrow-school">IIIT Gwalior</span>
+            </p>
             <h1>I build systems<br />that <em>scale &amp; heal.</em></h1>
             <p className="hero-summary">Production AI and backend infrastructure engineered to scale, recover, and stay reliable—from self-healing workflows to research-driven machine learning systems.</p>
             <div className="hero-actions">
@@ -247,7 +254,6 @@ export default function Home() {
           <div className="service-grid">
             {productionSurfaces.map((surface) => (
               <article key={surface.index}>
-                <span>{surface.index}</span>
                 <h3>{surface.title}</h3>
                 <p>{surface.description}</p>
                 <strong>{surface.signal}</strong>
