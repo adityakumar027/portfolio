@@ -95,6 +95,33 @@ const achievements = [
   "Google Big Code 2026 semifinalist",
 ];
 
+const productionSurfaces = [
+  {
+    index: "01",
+    title: "Campaign orchestration",
+    description: "Worked on campaign execution and failure-analysis paths where reliability directly affects high-volume customer communication.",
+    signal: "Production workflows · AI-assisted RCA",
+  },
+  {
+    index: "02",
+    title: "Segmentation services",
+    description: "Contributed to operational services that turn audience and policy inputs into dependable, reviewable production workflows.",
+    signal: "Human-in-the-loop · 85% less manual review",
+  },
+  {
+    index: "03",
+    title: "Notification reliability",
+    description: "Built self-learning remediation loops across notification systems, automatically resolving more than 60% of observed failures.",
+    signal: "60%+ auto-resolved · 70% faster response",
+  },
+  {
+    index: "04",
+    title: "Operations platform",
+    description: "Delivered APIs and real-time operational visibility across Coralogix, Sentry, AWS SQS, and Metabase.",
+    signal: "20+ REST APIs · Real-time dashboards",
+  },
+];
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -115,6 +142,7 @@ export default function Home() {
           <a href="#experience" onClick={closeMenu}>Experience</a>
           <a href="#work" onClick={closeMenu}>Work</a>
           <a href="#about" onClick={closeMenu}>About</a>
+          <a href="#scale" onClick={closeMenu}>Scale</a>
           <a href="#contact" onClick={closeMenu}>Contact</a>
         </nav>
         <a className="resume-link" href="https://drive.google.com/file/d/1OJ-TCUjlttRgMqDw7UB4nr96Z6fGtAiQ/view?usp=sharing" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>
@@ -139,9 +167,10 @@ export default function Home() {
             <span>STATUS / ACTIVE</span>
           </div>
           <div className="hero-proof" aria-label="Selected career metrics">
-            <article><strong>70%</strong><span><em>FASTER</em> INCIDENT RESPONSE</span></article>
-            <article><strong>60%+</strong><span>FAILURES <em>AUTO-RESOLVED</em></span></article>
-            <article><strong>1,000+</strong><span><em>ALGORITHMIC</em> PROBLEMS SOLVED</span></article>
+            <article><strong>1,200+</strong><span><em>Coding problems</em> solved</span></article>
+            <article><strong>50+</strong><span>Production <em>APIs shipped</em></span></article>
+            <article><strong>80%+</strong><span>Failures <em>auto-resolved</em></span></article>
+            <article><strong>Millions+</strong><span>Users served by <em>production services</em></span></article>
           </div>
         </section>
 
@@ -211,8 +240,30 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="section scale" id="scale">
+          <div className="section-heading scale-heading">
+            <p className="section-index">04 / CONSUMER SCALE</p>
+            <h2>Engineering inside<br /><em>high-traffic systems.</em></h2>
+            <p>Experience contributing to production services supporting consumer experiences used by millions of people.</p>
+          </div>
+          <div className="scale-context">
+            <p className="scale-label">CUREFIT · HOUSE OF CULT</p>
+            <p className="scale-statement">I worked across <em>campaign</em>, <em>segmentation</em>, and <em>notification</em> services—building the automation, observability, and remediation paths that keep large consumer platforms dependable.</p>
+          </div>
+          <div className="service-grid">
+            {productionSurfaces.map((surface) => (
+              <article key={surface.index}>
+                <span>{surface.index}</span>
+                <h3>{surface.title}</h3>
+                <p>{surface.description}</p>
+                <strong>{surface.signal}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="contact" id="contact">
-          <p className="section-index">04 / CONTACT</p>
+          <p className="section-index">05 / CONTACT</p>
           <h2>Have a difficult<br />system to build?</h2>
           <p>I’m open to software engineering roles and ambitious technical work.</p>
           <a className="contact-email" href="mailto:adi.workspace76865@gmail.com">Let’s talk <span>↗</span></a>
