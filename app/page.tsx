@@ -164,9 +164,9 @@ export default function Home() {
       <div className="site-grain" aria-hidden="true" />
 
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="The Core home">
-          <span className="brand-mark">C</span>
-          <span>THE CORE<small>ADITYA KUMAR</small></span>
+        <a className="brand" href="#top" aria-label="Portfolio home">
+          <span className="brand-mark">P</span>
+          <span>PORTFOLIO<small>ADITYA KUMAR</small></span>
         </a>
         <nav className={menuOpen ? "nav-links is-open" : "nav-links"} aria-label="Primary navigation">
           <a href="#experience" onClick={closeMenu}>Experience</a>
@@ -183,6 +183,14 @@ export default function Home() {
 
       <main id="main">
         <section className="hero" id="top">
+          <nav className="hero-profiles" aria-label="Professional profiles">
+            {achievements.map((achievement) => (
+              <a href={achievement.href} target="_blank" rel="noreferrer" key={achievement.metric}>
+                <strong>{achievement.metric}</strong>
+                <span>{achievement.before}<em>{achievement.highlight}</em>{achievement.after}</span>
+              </a>
+            ))}
+          </nav>
           <div className="hero-copy">
             <p className="eyebrow"><span /> Aditya Kumar · Software Engineer</p>
             <h1>I build systems<br />that <em>scale &amp; heal.</em></h1>
@@ -202,14 +210,6 @@ export default function Home() {
             <article><strong>80%+</strong><span>Failures <em>auto-resolved</em></span></article>
             <article><strong>Millions+</strong><span>Users served by <em>production services</em></span></article>
           </div>
-          <nav className="hero-profiles" aria-label="Professional profiles">
-            {achievements.map((achievement) => (
-              <a href={achievement.href} target="_blank" rel="noreferrer" key={achievement.metric}>
-                <strong>{achievement.metric}</strong>
-                <span>{achievement.before}<em>{achievement.highlight}</em>{achievement.after}</span>
-              </a>
-            ))}
-          </nav>
         </section>
 
         <section className="section experience" id="experience">

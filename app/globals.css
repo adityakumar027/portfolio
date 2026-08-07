@@ -135,7 +135,7 @@ main, .site-footer { position: relative; z-index: 2; }
 .capabilities article:hover { border-color:rgba(113,245,212,.3); background:linear-gradient(135deg,rgba(113,245,212,.06),transparent 72%); }
 .capabilities h3 { margin: 0; color: var(--text); font-size: 14px; font-weight: 650; }
 .capabilities p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
-.hero-profiles { grid-column: 1 / -1; min-height: 58px; padding-top: 14px; display: flex; align-items: baseline; justify-content: space-between; gap: clamp(18px,2.2vw,42px); border-top: 1px solid rgba(113,245,212,.2); }
+.hero-profiles { position: absolute; z-index: 4; top: 76px; left: clamp(24px,5.7vw,92px); right: clamp(24px,5.7vw,92px); min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: clamp(18px,2.2vw,42px); overflow: hidden; border-bottom: 1px solid rgba(113,245,212,.2); }
 .hero-profiles a { min-width: 0; display: inline-flex; align-items: baseline; gap: 8px; color: var(--muted); white-space: nowrap; transition: color 240ms ease,transform 240ms cubic-bezier(.22,1,.36,1); }
 .hero-profiles a:hover { color: var(--text); transform: translateY(-2px); }
 .hero-profiles strong { color: var(--text); font-size: clamp(12px,.9vw,15px); font-weight: 560; letter-spacing: -.02em; }
@@ -186,7 +186,8 @@ main, .site-footer { position: relative; z-index: 2; }
   .section-heading > p:last-child { display: none; }
   .about-layout { margin-left: 0; }
   .scale-context { margin-left: 0; }
-  .hero-profiles { flex-wrap: wrap; justify-content: flex-start; }
+  .hero-profiles { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+  .hero-profiles a { flex: 0 0 auto; }
   .project:first-child { grid-template-columns:1fr; }
   .project:first-child .project-content { padding:28px 14px 14px; }
   .project:first-child .project-visual { min-height:300px; }
@@ -231,8 +232,9 @@ main, .site-footer { position: relative; z-index: 2; }
   .about-copy > p { font-size: 19px; }
   .capabilities { grid-template-columns: 1fr; }
   .capabilities article { min-height: 0; padding: 22px; gap: 8px; }
-  .hero-profiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; padding-top: 18px; }
-  .hero-profiles a { padding: 11px 0; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; white-space: normal; }
+  .hero-profiles { top: 68px; left: 20px; right: 20px; min-height: 54px; }
+  .hero-profiles a { padding: 0 12px; }
+  .hero-profiles a:first-child { padding-left: 0; }
   .hero-profiles a:hover { transform: none; }
   .scale-context { display: block; }
   .scale-label { margin-bottom: 24px; }
