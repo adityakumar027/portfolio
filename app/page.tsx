@@ -289,7 +289,15 @@ export default function Home() {
             <div className="about-copy">
               <p>I’m an Integrated B.Tech IT + MBA student at IIIT Gwalior, graduating in 2027 with a 7.97 CGPA. My work sits at the intersection of backend engineering, intelligent automation, and production operations.</p>
               <p>I care about systems that are observable, explainable, and designed for failure—not just demos that work once.</p>
-              <div className="education-line"><span>Education</span><strong>IIIT Gwalior · Integrated B.Tech IT + MBA · Nov 2022—Jun 2027</strong></div>
+              <div className="education-line">
+                <span className="education-label">Education</span>
+                <strong>IIIT Gwalior</strong>
+                <div className="education-meta">
+                  <span>Integrated B.Tech IT + MBA</span>
+                  <span>CGPA 7.97</span>
+                  <span>Nov 2022 — Jun 2027</span>
+                </div>
+              </div>
             </div>
             <div className="capabilities">
               {capabilities.map((capability) => <article key={capability.label}><h3>{capability.label}</h3><p>{capability.items}</p></article>)}
