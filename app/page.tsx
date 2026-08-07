@@ -88,11 +88,41 @@ const capabilities = [
 ];
 
 const achievements = [
-  "LeetCode Knight · 1820",
-  "CodeChef 3★ · 1661",
-  "Codeforces · 1300+",
-  "1,000+ problems solved",
-  "Google Big Code 2026 semifinalist",
+  {
+    metric: "LinkedIn",
+    before: "View my ",
+    highlight: "engineering profile",
+    after: " ↗",
+    href: "https://www.linkedin.com/in/adicrzz/",
+  },
+  {
+    metric: "LeetCode",
+    before: "Knight · ",
+    highlight: "1820",
+    after: " rating ↗",
+    href: "https://leetcode.com/u/aditya_x1x/",
+  },
+  {
+    metric: "CodeChef",
+    before: "3★ · ",
+    highlight: "1661",
+    after: " rating ↗",
+    href: "https://www.codechef.com/users/aditya_x1x",
+  },
+  {
+    metric: "Codeforces",
+    before: "Competitive rating · ",
+    highlight: "1300+",
+    after: " ↗",
+    href: "https://codeforces.com/profile/aditya_x1x",
+  },
+  {
+    metric: "GitHub",
+    before: "Explore my ",
+    highlight: "projects & code",
+    after: " ↗",
+    href: "https://github.com/adityakumar027",
+  },
 ];
 
 const productionSurfaces = [
@@ -142,7 +172,7 @@ export default function Home() {
           <a href="#experience" onClick={closeMenu}>Experience</a>
           <a href="#scale" onClick={closeMenu}>Scale</a>
           <a href="#work" onClick={closeMenu}>Work</a>
-          <a href="#about" onClick={closeMenu}>About</a>
+          <a href="#skills" onClick={closeMenu}>Skills</a>
           <a href="#contact" onClick={closeMenu}>Contact</a>
         </nav>
         <a className="resume-link" href="https://drive.google.com/file/d/1OJ-TCUjlttRgMqDw7UB4nr96Z6fGtAiQ/view?usp=sharing" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>
@@ -172,11 +202,19 @@ export default function Home() {
             <article><strong>80%+</strong><span>Failures <em>auto-resolved</em></span></article>
             <article><strong>Millions+</strong><span>Users served by <em>production services</em></span></article>
           </div>
+          <nav className="hero-profiles" aria-label="Professional profiles">
+            {achievements.map((achievement) => (
+              <a href={achievement.href} target="_blank" rel="noreferrer" key={achievement.metric}>
+                <strong>{achievement.metric}</strong>
+                <span>{achievement.before}<em>{achievement.highlight}</em>{achievement.after}</span>
+              </a>
+            ))}
+          </nav>
         </section>
 
         <section className="section experience" id="experience">
           <div className="section-heading">
-            <p className="section-index">01 / EXPERIENCE</p>
+            <p className="section-index">EXPERIENCE</p>
             <h2>Work that reached<br />production.</h2>
             <p>Focused on measurable improvements to reliability, speed, and operational clarity.</p>
           </div>
@@ -198,7 +236,7 @@ export default function Home() {
 
         <section className="section scale" id="scale">
           <div className="section-heading scale-heading">
-            <p className="section-index">02 / CONSUMER SCALE</p>
+            <p className="section-index">CONSUMER SCALE</p>
             <h2>Engineering inside<br /><em>high-traffic systems.</em></h2>
             <p>Experience contributing to production services supporting consumer experiences used by millions of people.</p>
           </div>
@@ -220,7 +258,7 @@ export default function Home() {
 
         <section className="section work" id="work">
           <div className="section-heading work-heading">
-            <p className="section-index">03 / SELECTED WORK</p>
+            <p className="section-index">SELECTED WORK</p>
             <h2>Built around a real<br />engineering problem.</h2>
           </div>
           <div className="project-list">
@@ -242,9 +280,9 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section about" id="about">
+        <section className="section about" id="skills">
           <div className="section-heading">
-            <p className="section-index">04 / PROFILE &amp; SKILLS</p>
+            <p className="section-index">PROFILE &amp; SKILLS</p>
             <h2>Strong foundations.<br />Production range.</h2>
           </div>
           <div className="about-layout">
@@ -257,13 +295,10 @@ export default function Home() {
               {capabilities.map((capability) => <article key={capability.label}><h3>{capability.label}</h3><p>{capability.items}</p></article>)}
             </div>
           </div>
-          <div className="achievement-strip" aria-label="Selected achievements">
-            {achievements.map((achievement, index) => <span key={achievement}><b>{String(index + 1).padStart(2, "0")}</b>{achievement}</span>)}
-          </div>
         </section>
 
         <section className="contact" id="contact">
-          <p className="section-index">05 / CONTACT</p>
+          <p className="section-index">CONTACT</p>
           <h2>Have a difficult<br />system to build?</h2>
           <p>I’m open to software engineering roles and ambitious technical work.</p>
           <a className="contact-email" href="mailto:adi.workspace76865@gmail.com">Let’s talk <span>↗</span></a>
