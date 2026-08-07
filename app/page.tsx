@@ -140,9 +140,9 @@ export default function Home() {
         </a>
         <nav className={menuOpen ? "nav-links is-open" : "nav-links"} aria-label="Primary navigation">
           <a href="#experience" onClick={closeMenu}>Experience</a>
+          <a href="#scale" onClick={closeMenu}>Scale</a>
           <a href="#work" onClick={closeMenu}>Work</a>
           <a href="#about" onClick={closeMenu}>About</a>
-          <a href="#scale" onClick={closeMenu}>Scale</a>
           <a href="#contact" onClick={closeMenu}>Contact</a>
         </nav>
         <a className="resume-link" href="https://drive.google.com/file/d/1OJ-TCUjlttRgMqDw7UB4nr96Z6fGtAiQ/view?usp=sharing" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>
@@ -196,9 +196,31 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="section scale" id="scale">
+          <div className="section-heading scale-heading">
+            <p className="section-index">02 / CONSUMER SCALE</p>
+            <h2>Engineering inside<br /><em>high-traffic systems.</em></h2>
+            <p>Experience contributing to production services supporting consumer experiences used by millions of people.</p>
+          </div>
+          <div className="scale-context">
+            <p className="scale-label">CUREFIT · HOUSE OF CULT</p>
+            <p className="scale-statement">I worked across <em>campaign</em>, <em>segmentation</em>, and <em>notification</em> services—building the automation, observability, and remediation paths that keep large consumer platforms dependable.</p>
+          </div>
+          <div className="service-grid">
+            {productionSurfaces.map((surface) => (
+              <article key={surface.index}>
+                <span>{surface.index}</span>
+                <h3>{surface.title}</h3>
+                <p>{surface.description}</p>
+                <strong>{surface.signal}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="section work" id="work">
           <div className="section-heading work-heading">
-            <p className="section-index">02 / SELECTED WORK</p>
+            <p className="section-index">03 / SELECTED WORK</p>
             <h2>Built around a real<br />engineering problem.</h2>
           </div>
           <div className="project-list">
@@ -222,7 +244,7 @@ export default function Home() {
 
         <section className="section about" id="about">
           <div className="section-heading">
-            <p className="section-index">03 / PROFILE &amp; SKILLS</p>
+            <p className="section-index">04 / PROFILE &amp; SKILLS</p>
             <h2>Strong foundations.<br />Production range.</h2>
           </div>
           <div className="about-layout">
@@ -237,28 +259,6 @@ export default function Home() {
           </div>
           <div className="achievement-strip" aria-label="Selected achievements">
             {achievements.map((achievement, index) => <span key={achievement}><b>{String(index + 1).padStart(2, "0")}</b>{achievement}</span>)}
-          </div>
-        </section>
-
-        <section className="section scale" id="scale">
-          <div className="section-heading scale-heading">
-            <p className="section-index">04 / CONSUMER SCALE</p>
-            <h2>Engineering inside<br /><em>high-traffic systems.</em></h2>
-            <p>Experience contributing to production services supporting consumer experiences used by millions of people.</p>
-          </div>
-          <div className="scale-context">
-            <p className="scale-label">CUREFIT · HOUSE OF CULT</p>
-            <p className="scale-statement">I worked across <em>campaign</em>, <em>segmentation</em>, and <em>notification</em> services—building the automation, observability, and remediation paths that keep large consumer platforms dependable.</p>
-          </div>
-          <div className="service-grid">
-            {productionSurfaces.map((surface) => (
-              <article key={surface.index}>
-                <span>{surface.index}</span>
-                <h3>{surface.title}</h3>
-                <p>{surface.description}</p>
-                <strong>{surface.signal}</strong>
-              </article>
-            ))}
           </div>
         </section>
 
