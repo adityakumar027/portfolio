@@ -202,6 +202,14 @@ export default function Home() {
             <article><strong>80%+</strong><span>Failures <em>auto-resolved</em></span></article>
             <article><strong>Millions+</strong><span>Users served by <em>production services</em></span></article>
           </div>
+          <nav className="hero-profiles" aria-label="Professional profiles">
+            {achievements.map((achievement) => (
+              <a href={achievement.href} target="_blank" rel="noreferrer" key={achievement.metric}>
+                <strong>{achievement.metric}</strong>
+                <span>{achievement.before}<em>{achievement.highlight}</em>{achievement.after}</span>
+              </a>
+            ))}
+          </nav>
         </section>
 
         <section className="section experience" id="experience">
@@ -286,22 +294,6 @@ export default function Home() {
             <div className="capabilities">
               {capabilities.map((capability) => <article key={capability.label}><h3>{capability.label}</h3><p>{capability.items}</p></article>)}
             </div>
-          </div>
-          <div className="achievement-strip" aria-label="Selected achievements">
-            {achievements.map((achievement) => {
-              const content = (
-                <>
-                  <strong>{achievement.metric}</strong>
-                  <span>{achievement.before}<em>{achievement.highlight}</em>{achievement.after}</span>
-                </>
-              );
-
-              return achievement.href ? (
-                <a href={achievement.href} target="_blank" rel="noreferrer" key={achievement.metric}>{content}</a>
-              ) : (
-                <article key={achievement.metric}>{content}</article>
-              );
-            })}
           </div>
         </section>
 
