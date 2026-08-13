@@ -21,7 +21,7 @@ function EntranceObject({ settling }: { settling: boolean }) {
     wasSettling.current = settling;
 
     if (settling && transitionStartedAt.current !== null) {
-      const raw = THREE.MathUtils.clamp((state.clock.elapsedTime - transitionStartedAt.current) / 0.65, 0, 1);
+      const raw = THREE.MathUtils.clamp((state.clock.elapsedTime - transitionStartedAt.current) / 0.8, 0, 1);
       const eased = raw < 0.5
         ? 4 * raw ** 3
         : 1 - ((-2 * raw + 2) ** 3) / 2;
