@@ -158,7 +158,7 @@ main, .site-footer { position: relative; z-index: 2; }
 .hero-profiles span { overflow: hidden; text-overflow: ellipsis; font-size: clamp(10px,.67vw,12px); letter-spacing: -.01em; }
 .hero-profiles em { color: var(--accent); font-style: normal; }
 
-.scale { background: radial-gradient(circle at 78% 30%,rgba(113,245,212,.08),transparent 32%),linear-gradient(90deg,rgba(7,10,9,.93) 0%,rgba(7,11,9,.74) 44%,rgba(7,15,12,.38) 72%,rgba(7,15,12,.14) 100%); }
+.scale { background: linear-gradient(90deg,rgba(7,10,9,.93) 0%,rgba(7,11,9,.76) 44%,rgba(7,11,9,.42) 72%,rgba(7,11,9,.18) 100%); }
 .scale-heading h2 em { color: var(--accent); font-style: normal; }
 .scale-context { margin: 0 0 clamp(55px,6vw,90px) 13%; display: grid; grid-template-columns: .34fr 1fr; gap: 5vw; align-items: start; }
 .scale-label { margin: 8px 0 0; color: var(--accent); font: 500 9px var(--mono); letter-spacing: .1em; }
