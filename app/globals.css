@@ -33,11 +33,12 @@ button { color: inherit; font: inherit; }
 .nav-links { display: flex; align-items: center; gap: 34px; }
 .nav-links a, .resume-link { position:relative; color: var(--muted); font-family: var(--font-nav-mono); font-size: 10px; font-weight: 500; letter-spacing: 0.06em; transition: color 260ms ease, text-shadow 260ms ease; }
 .nav-links a:hover, .nav-links a:focus-visible, .resume-link:hover, .resume-link:focus-visible { color: var(--text); }
-.nav-links a::after { content:""; position:absolute; left:0; right:0; bottom:-8px; height:1px; transform:scaleX(0); transform-origin:left center; background:var(--accent); box-shadow:0 0 8px rgba(113,245,212,.65); transition:transform 180ms cubic-bezier(.4,0,1,1); }
-.nav-links a:hover::after { transform:scaleX(1); }
-.nav-links a[aria-current="location"]::after { animation: navLineIn 480ms cubic-bezier(.16,1,.3,1) both; }
+.nav-links a::after,.resume-link::after { content:""; position:absolute; left:0; right:100%; bottom:-8px; height:1px; background:var(--accent); box-shadow:0 0 8px rgba(113,245,212,.65); transition:right 280ms cubic-bezier(.22,1,.36,1); }
+.nav-links a:hover::after,.resume-link:hover::after { right:0; }
+.nav-links a[aria-current="location"]::after { right:0; }
 .nav-links a[aria-current="location"] { color:var(--text); }
 .resume-link { justify-self: end; padding-block: 10px; color: #c5cbc7; font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.resume-link::after { bottom: 1px; }
 .resume-link span { margin-left: 3px; color: var(--accent); }
 .menu-toggle { display: none; }
 
@@ -262,11 +263,6 @@ main, .site-footer { position: relative; z-index: 2; }
   .contact-email { gap: 40px; font-size: 29px; }
   .contact-links { margin-top: 70px; flex-wrap: wrap; }
   .site-footer { align-items: flex-start; gap: 16px; flex-direction: column; }
-}
-
-@keyframes navLineIn {
-  from { transform: scaleX(0); opacity: .35; }
-  to { transform: scaleX(1); opacity: 1; }
 }
 
 @keyframes projectSpin { to { transform:rotate(360deg); } }
