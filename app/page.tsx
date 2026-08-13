@@ -180,12 +180,12 @@ export default function Home() {
           if (cancelled) return;
           setIntroStarted(true);
           introTimersRef.current = [
-            window.setTimeout(() => setIntroState("settling"), 3250),
-            window.setTimeout(() => setIntroState("revealing"), 3900),
+            window.setTimeout(() => setIntroState("settling"), 2550),
+            window.setTimeout(() => setIntroState("revealing"), 3350),
             window.setTimeout(() => {
               document.body.classList.remove("intro-active");
               introTimersRef.current.push(window.setTimeout(() => setIntroState("hidden"), 1600));
-            }, 4300),
+            }, 3600),
           ];
         });
       });
@@ -208,7 +208,7 @@ export default function Home() {
     introTimersRef.current = [window.setTimeout(() => {
       document.body.classList.remove("intro-active");
       introTimersRef.current.push(window.setTimeout(() => setIntroState("hidden"), 1600));
-    }, 420)];
+    }, 250)];
   };
 
   useEffect(() => {
