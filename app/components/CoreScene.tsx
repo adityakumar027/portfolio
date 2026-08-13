@@ -164,7 +164,7 @@ function Scene({ pointer }: { pointer: PointerState }) {
   );
 }
 
-export default function CoreScene() {
+export default function CoreScene({ subdued = false }: { subdued?: boolean }) {
   const [enabled] = useState(() => typeof window !== "undefined" && innerWidth > 980 && !matchMedia("(prefers-reduced-motion: reduce)").matches);
   const [ready, setReady] = useState(false);
   const pointer = useRef({ x: 0, y: 0 });
@@ -185,7 +185,7 @@ export default function CoreScene() {
       <div className={ready ? "scene-loader is-ready" : "scene-loader"} aria-hidden="true">
         <span>INITIALIZING CORE</span><div><i style={{ transform: `scaleX(${ready ? 1 : 0.35})` }} /></div>
       </div>
-      <div className="webgl-layer" aria-hidden="true">
+      <div className={subdued ? "webgl-layer is-subdued" : "webgl-layer"} aria-hidden="true">
         <Canvas
           camera={{ position: [0, 0, 7.4], fov: 43 }}
           dpr={[1, 1.25]}
