@@ -41,8 +41,8 @@ button { color: inherit; font: inherit; }
 .resume-link span { margin-left: 3px; color: var(--accent); }
 .menu-toggle { display: none; }
 
-.webgl-layer { position: fixed; z-index: 0; inset: 0; pointer-events: none; opacity: 1; filter: saturate(1) brightness(1); -webkit-mask-image: linear-gradient(90deg,transparent 0 37%,rgba(0,0,0,.28) 51%,#000 68%); mask-image: linear-gradient(90deg,transparent 0 37%,rgba(0,0,0,.28) 51%,#000 68%); transition: opacity 900ms cubic-bezier(.22,1,.36,1),filter 900ms cubic-bezier(.22,1,.36,1); }
-.webgl-layer.is-subdued { opacity: .62; filter: saturate(.76) brightness(.82); }
+.webgl-layer { position: fixed; z-index: 0; inset: 0; pointer-events: none; opacity: 1; -webkit-mask-image: linear-gradient(90deg,transparent 0 37%,rgba(0,0,0,.28) 51%,#000 68%); mask-image: linear-gradient(90deg,transparent 0 37%,rgba(0,0,0,.28) 51%,#000 68%); transition: opacity 900ms cubic-bezier(.22,1,.36,1); }
+.webgl-layer.is-subdued { opacity: .44; }
 .scene-loader { position: fixed; z-index: 70; right: 4vw; bottom: 4vh; width: 180px; color: var(--dim); font: 500 7px var(--mono); letter-spacing: 0.12em; transition: opacity 500ms ease; pointer-events: none; }
 .scene-loader > div { height: 1px; margin-top: 8px; overflow: hidden; background: var(--line); }
 .scene-loader i { display: block; width: 100%; height: 100%; transform-origin: left; background: var(--accent); }
