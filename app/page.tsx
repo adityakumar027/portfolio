@@ -194,7 +194,7 @@ export default function Home() {
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
-      <CoreScene />
+      <CoreScene subdued={activeSection !== "top"} />
       <div className="site-grain" aria-hidden="true" />
       <div className="reading-progress" aria-hidden="true"><span ref={progressRef} /></div>
 
