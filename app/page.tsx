@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
 const CoreScene = dynamic(() => import("./components/CoreScene"), { ssr: false });
+const IntroCore = dynamic(() => import("./components/IntroCore"), { ssr: false });
 
 const experience = [
   {
@@ -155,9 +156,60 @@ const productionSurfaces = [
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("top");
+  const [introState, setIntroState] = useState<"visible" | "settling" | "revealing" | "hidden">("visible");
+  const [introStarted, setIntroStarted] = useState(false);
   const progressRef = useRef<HTMLSpanElement>(null);
+  const introTimersRef = useRef<number[]>([]);
 
   const closeMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    document.body.classList.add("intro-active");
+    let cancelled = false;
+    let firstFrame = 0;
+    let secondFrame = 0;
+
+    const beginIntro = async () => {
+      await document.fonts.ready;
+      firstFrame = window.requestAnimationFrame(() => {
+        secondFrame = window.requestAnimationFrame(() => {
+          if (cancelled) return;
+          setIntroStarted(true);
+          introTimersRef.current = [
+            window.setTimeout(() => setIntroState("settling"), 3250),
+            window.setTimeout(() => setIntroState("revealing"), 3900),
+            window.setTimeout(() => {
+              document.body.classList.remove("intro-active");
+              introTimersRef.current.push(window.setTimeout(() => setIntroState("hidden"), 1600));
+            }, 4300),
+          ];
+        });
+      });
+    };
+
+    void beginIntro();
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+      introTimersRef.current.forEach(window.clearTimeout);
+      document.body.classList.remove("intro-active");
+    };
+  }, []);
+
+  const skipIntro = () => {
+    introTimersRef.current.forEach(window.clearTimeout);
+    setIntroState("revealing");
+    introTimersRef.current = [window.setTimeout(() => {
+      document.body.classList.remove("intro-active");
+      introTimersRef.current.push(window.setTimeout(() => setIntroState("hidden"), 1600));
+    }, 420)];
+  };
 
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
@@ -193,6 +245,16 @@ export default function Home() {
 
   return (
     <>
+      <IntroCore phase={introState} />
+      {introState !== "hidden" && (
+        <div className={`site-intro is-${introState}${introStarted ? " has-started" : ""}`} role="dialog" aria-label="Welcome">
+          <div className="intro-copy">
+            <p className="intro-line intro-name"><span>Hi, I’m Aditya</span></p>
+            <p className="intro-line intro-role"><span>Software Engineer</span></p>
+          </div>
+          <button className="intro-skip" type="button" onClick={skipIntro}>Skip intro <span>↗</span></button>
+        </div>
+      )}
       <a className="skip-link" href="#main">Skip to content</a>
       <CoreScene subdued={activeSection !== "top"} />
       <div className="site-grain" aria-hidden="true" />
