@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const CoreScene = dynamic(() => import("./components/CoreScene"), { ssr: false });
 
@@ -154,14 +154,49 @@ const productionSurfaces = [
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("top");
+  const progressRef = useRef<HTMLSpanElement>(null);
 
   const closeMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
+    let frame = 0;
+
+    const updateScrollState = () => {
+      frame = 0;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      progressRef.current?.style.setProperty("--progress", String(progress));
+
+      const marker = window.innerHeight * 0.36;
+      let current = sections[0]?.id ?? "top";
+      sections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= marker) current = section.id;
+      });
+      setActiveSection((previous) => previous === current ? previous : current);
+    };
+
+    const requestUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(updateScrollState);
+    };
+
+    updateScrollState();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
       <CoreScene />
       <div className="site-grain" aria-hidden="true" />
+      <div className="reading-progress" aria-hidden="true"><span ref={progressRef} /></div>
 
       <header className="site-header">
         <a className="brand" href="#top" aria-label="Portfolio home">
@@ -169,11 +204,11 @@ export default function Home() {
           <span>PORTFOLIO<small>ADITYA KUMAR</small></span>
         </a>
         <nav className={menuOpen ? "nav-links is-open" : "nav-links"} aria-label="Primary navigation">
-          <a href="#experience" onClick={closeMenu}>Experience</a>
-          <a href="#scale" onClick={closeMenu}>Scale</a>
-          <a href="#work" onClick={closeMenu}>Work</a>
-          <a href="#skills" onClick={closeMenu}>Skills</a>
-          <a href="#contact" onClick={closeMenu}>Contact</a>
+          <a href="#experience" aria-current={activeSection === "experience" ? "location" : undefined} onClick={closeMenu}>Experience</a>
+          <a href="#scale" aria-current={activeSection === "scale" ? "location" : undefined} onClick={closeMenu}>Scale</a>
+          <a href="#work" aria-current={activeSection === "work" ? "location" : undefined} onClick={closeMenu}>Work</a>
+          <a href="#skills" aria-current={activeSection === "skills" ? "location" : undefined} onClick={closeMenu}>Skills</a>
+          <a href="#contact" aria-current={activeSection === "contact" ? "location" : undefined} onClick={closeMenu}>Contact</a>
         </nav>
         <a className="resume-link" href="https://drive.google.com/file/d/1OJ-TCUjlttRgMqDw7UB4nr96Z6fGtAiQ/view?usp=sharing" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>
         <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-label="Toggle navigation">
