@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { Component, useRef, useState, type ReactNode } from "react";
+import { useRef } from "react";
 import * as THREE from "three";
 
 type IntroPhase = "visible" | "settling" | "revealing" | "hidden";
@@ -59,76 +59,24 @@ function EntranceObject({ settling }: { settling: boolean }) {
   );
 }
 
-/* ---------- Error boundary for intro canvas ---------- */
-
-class IntroErrorBoundary extends Component<
-  { children: ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: { children: ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-  render() {
-    if (this.state.hasError) return null;
-    return this.props.children;
-  }
-}
-
-function IntroCoreInner({ phase }: { phase: IntroPhase }) {
+export default function IntroCore({ phase }: { phase: IntroPhase }) {
   const settling = phase === "settling" || phase === "revealing";
-  const [failed, setFailed] = useState(false);
+  const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (failed) return null;
+  if (reducedMotion) return null;
 
   return (
     <div className={`intro-core is-${phase}`} aria-hidden="true">
-      <Canvas
-        frameloop={phase === "hidden" ? "never" : "always"}
-        camera={{ position: [0, 0, 7.4], fov: 43 }}
-        dpr={[2, 2.5]}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-        onCreated={({ gl }) => {
-          gl.domElement.addEventListener("webglcontextlost", (event) => {
-            event.preventDefault();
-            setFailed(true);
-          });
-        }}
-      >
+      <Canvas frameloop={phase === "hidden" ? "never" : "always"} camera={{ position: [0, 0, 7.4], fov: 43 }} dpr={[2, 2.5]} gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}>
         <ambientLight intensity={0.24} color="#c9fff3" />
         <spotLight position={[-4, 5, 5]} color="#f3fffc" intensity={38} angle={0.44} penumbra={0.94} distance={17} decay={2} />
         <spotLight position={[4, 3, -3]} color="#71f5d4" intensity={50} angle={0.6} penumbra={1} distance={16} decay={2} />
         <EntranceObject settling={settling} />
-        <EffectComposer multisampling={4} resolutionScale={1}>
+        <EffectComposer multisampling={8} resolutionScale={1}>
           <Bloom intensity={0.3} luminanceThreshold={0.76} luminanceSmoothing={0.18} mipmapBlur />
           <Vignette eskil={false} offset={0.16} darkness={0.38} />
         </EffectComposer>
       </Canvas>
     </div>
-  );
-}
-
-export default function IntroCore({ phase }: { phase: IntroPhase }) {
-  const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reducedMotion) return null;
-
-  // Quick WebGL probe
-  if (typeof window !== "undefined") {
-    try {
-      const probe = document.createElement("canvas");
-      const opts: WebGLContextAttributes = { failIfMajorPerformanceCaveat: true };
-      if (!probe.getContext("webgl2", opts) && !probe.getContext("webgl", opts)) return null;
-    } catch {
-      return null;
-    }
-  }
-
-  return (
-    <IntroErrorBoundary>
-      <IntroCoreInner phase={phase} />
-    </IntroErrorBoundary>
   );
 }
